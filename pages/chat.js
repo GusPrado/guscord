@@ -1,6 +1,8 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { createClient } from '@supabase/supabase-js';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 import appConfig from '../config.json';
 
@@ -10,6 +12,8 @@ const supabaseClient = createClient(
 );
 
 export default function ChatPage() {
+  const router = useRouter();
+  const loggedUser = router.query.username;
   const [message, setMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
@@ -26,7 +30,7 @@ export default function ChatPage() {
   function handleNewMessage(newMessage) {
     const message = {
       // id: messageList.length,
-      from: 'someone',
+      from: loggedUser,
       text: newMessage,
     };
 
@@ -115,6 +119,12 @@ export default function ChatPage() {
                 color: appConfig.theme.colors.neutrals[200],
               }}
             />
+            <ButtonSendSticker
+              onStickerClick={(sticker) => {
+                console.log('[USANDO O COMPONENTE]: Salva no banco', sticker);
+                handleNewMessage(`:sticker: ${sticker}`);
+              }}
+            />
           </Box>
         </Box>
       </Box>
@@ -201,7 +211,14 @@ function MessageList(props) {
                 {new Date().toLocaleString()}
               </Text>
             </Box>
-            {message.text}
+            {message.text.startsWith(':sticker:') ? (
+              <Image
+                src={message.text.replace(':sticker:', '')}
+                styleSheet={{ width: '30%' }}
+              />
+            ) : (
+              message.text
+            )}
           </Text>
         );
       })}
