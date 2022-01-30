@@ -45,7 +45,7 @@ export default function PaginaInicial() {
           justifyContent: 'center',
           backgroundColor: appConfig.theme.colors.primary[500],
           backgroundImage:
-            'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+            'url(https://virtualbackgrounds.site/wp-content/uploads/2020/07/star-wars-imperial-star-destroyer-bridge.jpg)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundBlendMode: 'multiply',
@@ -69,7 +69,7 @@ export default function PaginaInicial() {
             backgroundColor: appConfig.theme.colors.neutrals[700],
           }}
         >
-          {/* Formulário */}
+          {/* Form */}
           <Box
             as='form'
             onSubmit={(e) => {
@@ -86,10 +86,11 @@ export default function PaginaInicial() {
               marginBottom: '32px',
             }}
           >
-            <Titulo tag='h2'>Boas vindas de volta!</Titulo>
+            <Titulo tag='h2'>Welcome Padawan!</Titulo>
             <Text
-              variant='body3'
+              variant='body2'
               styleSheet={{
+                marginTop: '8px',
                 marginBottom: '32px',
                 color: appConfig.theme.colors.neutrals[300],
               }}
@@ -98,6 +99,7 @@ export default function PaginaInicial() {
             </Text>
 
             <TextField
+              placeholder='Insert your GitHub username here'
               value={username}
               onChange={(e) => {
                 const valor = e.target.value;
@@ -120,7 +122,7 @@ export default function PaginaInicial() {
             />
             <Button
               type='submit'
-              label='Entrar'
+              label='Enter'
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals['000'],
@@ -130,7 +132,7 @@ export default function PaginaInicial() {
               }}
             />
           </Box>
-          {/* Formulário */}
+          {/* Form end */}
 
           {/* Photo Area */}
           <Box
@@ -156,7 +158,7 @@ export default function PaginaInicial() {
               src={
                 minChar
                   ? `https://github.com/${username}.png`
-                  : 'images/blank.png'
+                  : 'images/yoda.jpg'
               }
             />
             <Text
@@ -171,7 +173,7 @@ export default function PaginaInicial() {
               {username}
             </Text>
           </Box>
-          {/* Photo Area */}
+          {/* Photo Area end */}
         </Box>
       </Box>
     </>

@@ -17,14 +17,30 @@ export default function ChatPage() {
   const [message, setMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
 
+  function listenRealTimeMessages(addMessage) {
+    return supabaseClient
+      .from('messages')
+      .on('INSERT', (response) => {
+        addMessage(response.new);
+      })
+      .subscribe();
+  }
+
   useEffect(() => {
     supabaseClient
       .from('messages')
       .select('*')
       .order('id', { ascending: false })
       .then(({ data }) => {
+        console.log('mesgs', data);
         setMessageList(data);
       });
+
+    listenRealTimeMessages((newMessage) => {
+      setMessageList((actualListContent) => {
+        return [newMessage, ...actualListContent];
+      });
+    });
   }, []);
 
   function handleNewMessage(newMessage) {
@@ -38,9 +54,10 @@ export default function ChatPage() {
       .from('messages')
       .insert([message])
       .then(({ data }) => {
-        setMessageList([data[0], ...messageList]);
-        setMessage('');
+        console.log('criando nova mesg', data);
       });
+
+    setMessage('');
   }
 
   return (
@@ -50,7 +67,7 @@ export default function ChatPage() {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: appConfig.theme.colors.primary[500],
-        backgroundImage: `url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)`,
+        backgroundImage: `url(https://virtualbackgrounds.site/wp-content/uploads/2020/07/star-wars-imperial-star-destroyer-bridge.jpg)`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundBlendMode: 'multiply',
@@ -66,8 +83,8 @@ export default function ChatPage() {
           borderRadius: '5px',
           backgroundColor: appConfig.theme.colors.neutrals[700],
           height: '100%',
-          maxWidth: '95%',
-          maxHeight: '95vh',
+          maxWidth: '80%',
+          maxHeight: '90vh',
           padding: '32px',
         }}
       >
@@ -121,7 +138,7 @@ export default function ChatPage() {
             />
             <ButtonSendSticker
               onStickerClick={(sticker) => {
-                console.log('[USANDO O COMPONENTE]: Salva no banco', sticker);
+                // console.log('[USANDO O COMPONENTE]: Salva no banco', sticker)
                 handleNewMessage(`:sticker: ${sticker}`);
               }}
             />
